@@ -19,28 +19,58 @@ jobs:
         run: |
           curl -sL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/PayPal/PayPal.list" -o /tmp/pp1.list
           curl -sL "https://raw.githubusercontent.com/QuixoticHeart/rule-set/refs/heads/ruleset/surge/paypal.list" -o /tmp/pp2.list
+          # 第三个上游是 MetaCubeX 的二进制 mrs，用官方 mihomo 转回文本
+          curl -sL "https://github.com/MetaCubeX/mihomo/releases/download/v1.19.32/mihomo-linux-amd64-v1.19.32.gz" -o /tmp/mihomo.gz
+          gunzip -f /tmp/mihomo.gz && chmod +x /tmp/mihomo
+          curl -sL "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs" -o /tmp/paypal.mrs
+          /tmp/mihomo convert-ruleset domain mrs /tmp/paypal.mrs /tmp/pp3.txt
           python3 - <<'EOF'
           import os
           from datetime import datetime, timezone, timedelta
 
           MARKER = "# ===== 自定义规则（自动同步会保留此区域内容） ====="
-          SOURCES = [("/tmp/pp1.list", "blackmatrix7"), ("/tmp/pp2.list", "QuixoticHeart")]
 
-          # 1. 上游规则：跳过注释与空行，多源合并去重
-          upstream, seen = [], set()
-          counts = {}
-          for path, name in SOURCES:
-              n = 0
+          def read_text_list(path):
+              rules = []
               with open(path) as f:
                   for line in f:
                       line = line.strip()
                       if not line or line.startswith("#"):
                           continue
-                      n += 1
-                      if line not in seen:
-                          seen.add(line)
-                          upstream.append(line)
-              counts[name] = n
+                      rules.append(line)
+              return rules
+
+          def read_mrs_dump(path):
+              # mihomo 转出的 Clash 格式：+.x / .x / x
+              rules = []
+              with open(path) as f:
+                  for line in f:
+                      line = line.strip()
+                      if not line:
+                          continue
+                      if line.startswith("+."):
+                          rules.append("DOMAIN-SUFFIX," + line[2:])
+                      elif line.startswith("."):
+                          rules.append("DOMAIN-SUFFIX," + line[1:])
+                      else:
+                          rules.append("DOMAIN," + line)
+              return rules
+
+          SOURCES = [
+              ("/tmp/pp1.list", "blackmatrix7", read_text_list),
+              ("/tmp/pp2.list", "QuixoticHeart", read_text_list),
+              ("/tmp/pp3.txt", "meta-mrs", read_mrs_dump),
+          ]
+
+          # 1. 上游规则：多源合并去重
+          upstream, seen, counts = [], set(), {}
+          for path, name, parser in SOURCES:
+              lines = parser(path)
+              counts[name] = len(lines)
+              for line in lines:
+                  if line not in seen:
+                      seen.add(line)
+                      upstream.append(line)
 
           # 2. 旧文件中的自定义规则（保留区内容；兼容没有保留区的旧文件）
           custom = []
@@ -58,7 +88,7 @@ jobs:
           total = len(upstream) + len(custom)
           bj = timezone(timedelta(hours=8))
           now = datetime.now(bj).strftime("%Y-%m-%d %H:%M:%S")
-          src_info = " + ".join(f"{name} {counts[name]}" for _, name in SOURCES)
+          src_info = " + ".join(f"{name} {counts[name]}" for _, name, _ in SOURCES)
 
           # 3. 写文件：头部信息 + 上游规则 + 自定义保留区
           out = [
