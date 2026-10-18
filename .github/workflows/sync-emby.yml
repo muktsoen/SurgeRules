@@ -1,0 +1,77 @@
+name: Sync Emby rules
+
+on:
+  schedule:
+    # 每天 UTC 20:00（北京时间次日 04:00）运行一次
+    - cron: "0 20 * * *"
+  workflow_dispatch:  # 允许在 Actions 页面手动触发
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch upstream and merge with custom rules
+        run: |
+          curl -sL "https://github.com/blackmatrix7/ios_rule_script/raw/refs/heads/master/rule/Surge/Emby/Emby.list" -o /tmp/emby.list
+          python3 - <<'EOF'
+          import os
+          from datetime import datetime, timezone, timedelta
+
+          MARKER = "# ===== 自定义规则（自动同步会保留此区域内容） ====="
+
+          # 1. 上游规则：跳过注释与空行
+          upstream, seen = [], set()
+          with open("/tmp/emby.list") as f:
+              for line in f:
+                  line = line.strip()
+                  if not line or line.startswith("#"):
+                      continue
+                  if line not in seen:
+                      seen.add(line)
+                      upstream.append(line)
+
+          # 2. 旧文件中的自定义规则（保留区内容；兼容没有保留区的旧文件）
+          custom = []
+          if os.path.exists("Emby.list"):
+              with open("Emby.list") as f:
+                  old = [l.rstrip("\n") for l in f]
+              if MARKER in old:
+                  custom = [l for l in old[old.index(MARKER) + 1:]
+                            if l.strip() and not l.startswith("#")]
+              else:
+                  custom = [l for l in old
+                            if l.strip() and not l.startswith("#") and l not in seen]
+              custom = [c for c in custom if c not in seen]
+
+          total = len(upstream) + len(custom)
+          bj = timezone(timedelta(hours=8))
+          now = datetime.now(bj).strftime("%Y-%m-%d %H:%M:%S")
+
+          # 3. 写文件：头部信息 + 上游规则 + 自定义保留区
+          out = [
+              "# Emby 分流规则（上游 blackmatrix7/ios_rule_script，每日自动同步）",
+              f"# 更新时间：{now}（北京时间）",
+              f"# 规则总数：{total}（上游 {len(upstream)}，自定义 {len(custom)}）",
+              "",
+              *upstream,
+              "",
+              MARKER,
+              *custom,
+          ]
+          with open("Emby.list", "w") as f:
+              f.write("\n".join(out) + "\n")
+          print(f"upstream={len(upstream)} custom={len(custom)} total={total}")
+          EOF
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Emby.list
+          git diff --cached --quiet || git commit -m "chore: 自动同步上游 Emby 规则"
+          git push
