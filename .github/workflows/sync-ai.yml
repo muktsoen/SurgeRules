@@ -49,6 +49,13 @@ jobs:
                           rules.append(f"{m.group(1)},{m.group(2).strip()}")
               return rules
 
+          def rule_key(line):
+              # 规则键 = 类型 + 参数（忽略策略列 / no-resolve 等后缀）
+              parts = line.split(",")
+              rtype = parts[0].strip().upper()
+              arg = parts[1].strip().lower() if len(parts) > 1 else ""
+              return (rtype, arg)
+
           SOURCES = [
               ("/tmp/ai1.list", "QuixoticHeart", read_text_list),
               ("/tmp/ai2.yaml", "ddgksf2013", read_clash_yaml),
@@ -57,17 +64,7 @@ jobs:
               ("/tmp/ai5.list", "VPSDance", read_text_list),
           ]
 
-          # 1. 上游规则：多源合并去重
-          upstream, seen, counts = [], set(), {}
-          for path, name, parser in SOURCES:
-              lines = parser(path)
-              counts[name] = len(lines)
-              for line in lines:
-                  if line not in seen:
-                      seen.add(line)
-                      upstream.append(line)
-
-          # 2. 旧文件中的自定义规则（保留区内容；兼容没有保留区的旧文件）
+          # 1. 先读旧文件中的自定义规则（保留区内容；兼容没有保留区的旧文件）
           custom = []
           if os.path.exists("AI.list"):
               with open("AI.list") as f:
@@ -77,8 +74,20 @@ jobs:
                             if l.strip() and not l.startswith("#")]
               else:
                   custom = [l for l in old
-                            if l.strip() and not l.startswith("#") and l not in seen]
-              custom = [c for c in custom if c not in seen]
+                            if l.strip() and not l.startswith("#")]
+          custom_keys = {rule_key(c) for c in custom}
+
+          # 2. 上游规则：多源合并去重。
+          #    自定义规则优先：与自定义同键（同类型同参数）的上游条目直接丢掉，
+          #    避免上游的无策略条目排在前面、把自定义的带策略条目屏蔽掉。
+          upstream, seen, counts = [], set(), {}
+          for path, name, parser in SOURCES:
+              lines = parser(path)
+              counts[name] = len(lines)
+              for line in lines:
+                  if line not in seen and rule_key(line) not in custom_keys:
+                      seen.add(line)
+                      upstream.append(line)
 
           total = len(upstream) + len(custom)
           bj = timezone(timedelta(hours=8))
