@@ -1,0 +1,86 @@
+name: Sync PayPal rules
+
+on:
+  schedule:
+    # 每天 UTC 20:00（北京时间次日 04:00）运行一次
+    - cron: "0 20 * * *"
+  workflow_dispatch:  # 允许在 Actions 页面手动触发
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch upstreams and merge with custom rules
+        run: |
+          curl -sL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/PayPal/PayPal.list" -o /tmp/pp1.list
+          curl -sL "https://raw.githubusercontent.com/QuixoticHeart/rule-set/refs/heads/ruleset/surge/paypal.list" -o /tmp/pp2.list
+          python3 - <<'EOF'
+          import os
+          from datetime import datetime, timezone, timedelta
+
+          MARKER = "# ===== 自定义规则（自动同步会保留此区域内容） ====="
+          SOURCES = [("/tmp/pp1.list", "blackmatrix7"), ("/tmp/pp2.list", "QuixoticHeart")]
+
+          # 1. 上游规则：跳过注释与空行，多源合并去重
+          upstream, seen = [], set()
+          counts = {}
+          for path, name in SOURCES:
+              n = 0
+              with open(path) as f:
+                  for line in f:
+                      line = line.strip()
+                      if not line or line.startswith("#"):
+                          continue
+                      n += 1
+                      if line not in seen:
+                          seen.add(line)
+                          upstream.append(line)
+              counts[name] = n
+
+          # 2. 旧文件中的自定义规则（保留区内容；兼容没有保留区的旧文件）
+          custom = []
+          if os.path.exists("PayPal.list"):
+              with open("PayPal.list") as f:
+                  old = [l.rstrip("\n") for l in f]
+              if MARKER in old:
+                  custom = [l for l in old[old.index(MARKER) + 1:]
+                            if l.strip() and not l.startswith("#")]
+              else:
+                  custom = [l for l in old
+                            if l.strip() and not l.startswith("#") and l not in seen]
+              custom = [c for c in custom if c not in seen]
+
+          total = len(upstream) + len(custom)
+          bj = timezone(timedelta(hours=8))
+          now = datetime.now(bj).strftime("%Y-%m-%d %H:%M:%S")
+          src_info = " + ".join(f"{name} {counts[name]}" for _, name in SOURCES)
+
+          # 3. 写文件：头部信息 + 上游规则 + 自定义保留区
+          out = [
+              "# PayPal 分流规则（上游每日自动同步）",
+              f"# 上游来源：{src_info}",
+              f"# 更新时间：{now}（北京时间）",
+              f"# 规则总数：{total}（上游去重后 {len(upstream)}，自定义 {len(custom)}）",
+              "",
+              *upstream,
+              "",
+              MARKER,
+              *custom,
+          ]
+          with open("PayPal.list", "w") as f:
+              f.write("\n".join(out) + "\n")
+          print(f"upstream={len(upstream)} custom={len(custom)} total={total}")
+          EOF
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add PayPal.list
+          git diff --cached --quiet || git commit -m "chore: 自动同步上游 PayPal 规则"
+          git push
