@@ -1,7 +1,7 @@
 # AI 分流规则（上游每日自动同步）
 # 上游来源：QuixoticHeart 229 + ddgksf2013 78 + skk.moe 56 + blackmatrix7(Facebook) 570 + VPSDance 339
-# 更新时间：2026-10-18 18:33:07（北京时间）
-# 规则总数：1010（上游去重后 1009，自定义 1）
+# 更新时间：2026-10-18 18:40:28（北京时间）
+# 规则总数：1012（上游去重后 1008，自定义 4）
 
 DOMAIN,7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe
 DOMAIN,ai.google.dev
@@ -173,7 +173,6 @@ DOMAIN-SUFFIX,minimax.io
 DOMAIN-SUFFIX,mistral.ai
 DOMAIN-SUFFIX,moonshot.ai
 DOMAIN-SUFFIX,mozilla.ai
-DOMAIN-SUFFIX,muse.ai
 DOMAIN-SUFFIX,notebook.google
 DOMAIN-SUFFIX,notebook.google.com
 DOMAIN-SUFFIX,notebooklm.google
@@ -1015,3 +1014,6 @@ DOMAIN-SUFFIX,you.com
 
 # ===== 自定义规则（自动同步会保留此区域内容） =====
 DOMAIN,hatch.metaaivm.com
+DOMAIN-SUFFIX,muse.ai,proxy
+DOMAIN-SUFFIX,museai.com,proxy
+DOMAIN-SUFFIX,ecto1.ai,proxy
