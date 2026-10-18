@@ -1,7 +1,7 @@
 # PayPal 分流规则（上游每日自动同步）
-# 上游来源：blackmatrix7 248 + QuixoticHeart 247
-# 更新时间：2026-10-18 18:12:13（北京时间）
-# 规则总数：248（上游去重后 248，自定义 0）
+# 上游来源：blackmatrix7 248 + QuixoticHeart 247 + meta-mrs 245
+# 更新时间：2026-10-18 18:21:34（北京时间）
+# 规则总数：249（上游去重后 249，自定义 0）
 
 DOMAIN-SUFFIX,account-paypal.info
 DOMAIN-SUFFIX,account-paypal.net
@@ -251,5 +251,6 @@ DOMAIN-SUFFIX,xoom.us
 DOMAIN-SUFFIX,xoomcom.com
 DOMAIN-KEYWORD,paypal
 USER-AGENT,PayPal*
+DOMAIN,venmo.s3.amazonaws.com
 
 # ===== 自定义规则（自动同步会保留此区域内容） =====
