@@ -1,7 +1,7 @@
 # AI 分流规则（上游每日自动同步）
-# 上游来源：QuixoticHeart 230 + ddgksf2013 78 + skk.moe 56 + blackmatrix7(Facebook) 570 + VPSDance 340
-# 更新时间：2026-10-21 07:01:04（北京时间）
-# 规则总数：1013（上游去重后 1009，自定义 4）
+# 上游来源：QuixoticHeart 241 + ddgksf2013 78 + skk.moe 56 + blackmatrix7(Facebook) 570 + VPSDance 340
+# 更新时间：2026-10-22 07:04:19（北京时间）
+# 规则总数：1016（上游去重后 1012，自定义 4）
 
 DOMAIN,7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe
 DOMAIN,ai.google.dev
@@ -35,6 +35,7 @@ DOMAIN,imagine.meta.com
 DOMAIN,notebooklm-pa.googleapis.com
 DOMAIN,notebooklm.googleapis.com
 DOMAIN,o33249.ingest.sentry.io
+DOMAIN,o33249.ingest.us.sentry.io
 DOMAIN,openai.qualtrics.com
 DOMAIN,openaiassets.blob.core.windows.net
 DOMAIN,openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net
@@ -55,9 +56,12 @@ DOMAIN-SUFFIX,aicode.googleapis.com
 DOMAIN-SUFFIX,aida.googleapis.com
 DOMAIN-SUFFIX,aisandbox-pa.googleapis.com
 DOMAIN-SUFFIX,aistudio.google.com
+DOMAIN-SUFFIX,ant.dev
 DOMAIN-SUFFIX,anthropic.com
+DOMAIN-SUFFIX,anthropic.team
 DOMAIN-SUFFIX,antigravity-unleash.goog
 DOMAIN-SUFFIX,antigravity.google
+DOMAIN-SUFFIX,antspace.dev
 DOMAIN-SUFFIX,anythingllm.com
 DOMAIN-SUFFIX,apps.mzstatic.com
 DOMAIN-SUFFIX,arena.ai
@@ -66,6 +70,7 @@ DOMAIN-SUFFIX,bard.google.com
 DOMAIN-SUFFIX,byteoversea.com
 DOMAIN-SUFFIX,cerebras.ai
 DOMAIN-SUFFIX,chat.com
+DOMAIN-SUFFIX,chatbotclaude.com
 DOMAIN-SUFFIX,chatgpt.com
 DOMAIN-SUFFIX,chatgpt.site
 DOMAIN-SUFFIX,chutes.ai
@@ -74,10 +79,16 @@ DOMAIN-SUFFIX,ciciai.com
 DOMAIN-SUFFIX,ciciaicdn.com
 DOMAIN-SUFFIX,clau.de
 DOMAIN-SUFFIX,claude.ai
+DOMAIN-SUFFIX,claude.app
 DOMAIN-SUFFIX,claude.com
 DOMAIN-SUFFIX,claude.dev
+DOMAIN-SUFFIX,claude.new
+DOMAIN-SUFFIX,claude.site
+DOMAIN-SUFFIX,claudeacademy.com
 DOMAIN-SUFFIX,claudemcpclient.com
 DOMAIN-SUFFIX,claudemcpcontent.com
+DOMAIN-SUFFIX,claudepages.dev
+DOMAIN-SUFFIX,claudestudio.com
 DOMAIN-SUFFIX,claudeusercontent.com
 DOMAIN-SUFFIX,clawhub.ai
 DOMAIN-SUFFIX,client-api.arkoselabs.com
@@ -870,12 +881,6 @@ DOMAIN-SUFFIX,q.eu-central-1.amazonaws.com
 DOMAIN-SUFFIX,q.us-east-1.amazonaws.com
 DOMAIN-SUFFIX,sso.amazonaws.com
 DOMAIN-SUFFIX,anthropic.com.cn
-DOMAIN-SUFFIX,antspace.dev
-DOMAIN-SUFFIX,claude.app
-DOMAIN-SUFFIX,claude.new
-DOMAIN-SUFFIX,claude.site
-DOMAIN-SUFFIX,claudepages.dev
-DOMAIN-SUFFIX,claudestudio.com
 DOMAIN-SUFFIX,modelcontextprotocol.com
 DOMAIN-SUFFIX,modelcontextprotocol.io
 DOMAIN-SUFFIX,modelcontextprotocol.net
@@ -892,8 +897,6 @@ DOMAIN,anthropic.auth0.com
 DOMAIN,browser-intake-us5-datadoghq.com
 DOMAIN,cdn.growthbook.io
 DOMAIN,storage.googleapis.com
-DOMAIN-SUFFIX,anthropic.team
-DOMAIN-SUFFIX,chatbotclaude.com
 DOMAIN-SUFFIX,interface.feedback
 DOMAIN-SUFFIX,lcicat.org
 DOMAIN-SUFFIX,lcicollections.org
