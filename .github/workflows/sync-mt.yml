@@ -1,0 +1,139 @@
+name: Sync MT rules
+
+on:
+  schedule:
+    # 每天 UTC 20:00（北京时间次日 04:00）运行一次
+    - cron: "0 20 * * *"
+  workflow_dispatch:  # 允许在 Actions 页面手动触发
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch upstream and convert to Surge module
+        run: |
+          curl -sL "https://raw.githubusercontent.com/ZenmoFeiShi/Qx/refs/heads/main/MT.snippet" -o /tmp/MT.snippet
+          python3 - <<'EOF'
+          import re, sys
+          from datetime import datetime, timezone, timedelta
+
+          SRC = sys.argv[1] if len(sys.argv) > 1 else "/tmp/MT.snippet"
+          DST = sys.argv[2] if len(sys.argv) > 2 else "MT.sgmodule"
+          UPSTREAM_URL = "https://raw.githubusercontent.com/ZenmoFeiShi/Qx/refs/heads/main/MT.snippet"
+
+          # Qx host 系规则按 SNI 匹配；Surge 域名规则默认只测请求主机名，
+          # 美团 HTTPDNS 直连 IP 时必须显式开 extended-matching 才能命中。
+          DOMAIN_TYPES = {
+              "host": "DOMAIN",
+              "host-wildcard": "DOMAIN-WILDCARD",
+              "host-suffix": "DOMAIN-SUFFIX",
+              "host-keyword": "DOMAIN-KEYWORD",
+              "domain": "DOMAIN",
+              "domain-wildcard": "DOMAIN-WILDCARD",
+              "domain-suffix": "DOMAIN-SUFFIX",
+              "domain-keyword": "DOMAIN-KEYWORD",
+          }
+          # 模块 [Rule] 只允许内部策略
+          POLICY_MAP = {
+              "reject": "REJECT",
+              "direct": "DIRECT",
+              "reject-tinygif": "REJECT-TINYGIF",
+          }
+
+          name, author = "美团App", ""
+          rules, scripts, hostnames, warnings = [], [], [], []
+
+          with open(SRC) as f:
+              for raw in f:
+                  line = raw.strip()
+                  if not line or line.startswith("#"):
+                      if line.startswith("#!name"):
+                          name = line.split("=", 1)[1].strip()
+                      elif line.startswith("#!author"):
+                          author = line.split("=", 1)[1].strip()
+                      continue
+                  if line.lower().startswith("hostname"):
+                      hostnames.extend([h.strip() for h in line.split("=", 1)[1].split(",") if h.strip()])
+                      continue
+                  m = re.match(r"^(.+?)\s+url\s+script-response-body\s+(\S+)\s*$", line)
+                  if m:
+                      # Qx 正则里的 \/ 转义在 Surge 里直接写 /
+                      scripts.append((m.group(1).replace("\\/", "/"), m.group(2)))
+                      continue
+                  parts = [p.strip() for p in line.split(",")]
+                  rtype = parts[0].lower()
+                  if rtype in DOMAIN_TYPES and len(parts) >= 3:
+                      policy = POLICY_MAP.get(parts[2].lower())
+                      if policy:
+                          rules.append(f"{DOMAIN_TYPES[rtype]},{parts[1]},{policy},extended-matching")
+                          continue
+                  if rtype in ("ip-cidr", "ip6-cidr") and len(parts) >= 3:
+                      policy = POLICY_MAP.get(parts[2].lower())
+                      if policy:
+                          out_type = "IP-CIDR" if rtype == "ip-cidr" else "IP-CIDR6"
+                          extra = "" if "no-resolve" in [p.lower() for p in parts[3:]] else ",no-resolve"
+                          rules.append(f"{out_type},{parts[1]},{policy}{extra}")
+                          continue
+                  if rtype == "geoip" and len(parts) >= 3:
+                      policy = POLICY_MAP.get(parts[2].lower())
+                      if policy:
+                          rules.append(f"GEOIP,{parts[1]},{policy}")
+                          continue
+                  if rtype == "user-agent" and len(parts) >= 3:
+                      policy = POLICY_MAP.get(parts[2].lower())
+                      if policy:
+                          rules.append(f"USER-AGENT,{parts[1]},{policy}")
+                          continue
+                  warnings.append(line)
+
+          bj = timezone(timedelta(hours=8))
+          now = datetime.now(bj).strftime("%Y-%m-%d %H:%M:%S")
+
+          out = []
+          out.append(f"#!name={name}")
+          out.append("#!desc=由 ZenmoFeiShi 的 Qx MT.snippet 自动转换而来，Surge 可用（上游每日自动同步）")
+          if author:
+              out.append(f"#!author={author}")
+          out.append(f"# 上游来源：{UPSTREAM_URL}")
+          out.append(f"# 更新时间：{now}（北京时间）")
+          out.append(f"# 规则总数：{len(rules) + len(scripts)}（拦截规则 {len(rules)}，脚本 {len(scripts)}）")
+          out.append("")
+          if rules:
+              out.append("[Rule]")
+              out.extend(rules)
+              out.append("")
+          if scripts:
+              out.append("[Script]")
+              for i, (pattern, js) in enumerate(scripts, 1):
+                  out.append(f"MT-{i} = type=http-response,pattern={pattern},script-path={js},requires-body=true")
+              out.append("")
+          if hostnames:
+              seen = set()
+              uniq = [h for h in hostnames if not (h in seen or seen.add(h))]
+              out.append("[MITM]")
+              out.append("hostname = %APPEND% " + ", ".join(uniq))
+              out.append("")
+          if warnings:
+              out.append("# 转换告警：以下 Qx 行未能自动转换，请人工检查")
+              for w in warnings:
+                  out.append(f"# 未转换：{w}")
+                  print(f"WARNING: unconverted line: {w}")
+              out.append("")
+
+          with open(DST, "w") as f:
+              f.write("\n".join(out))
+          print(f"rules={len(rules)} scripts={len(scripts)} hostnames={len(hostnames)} warnings={len(warnings)}")
+          EOF
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add MT.sgmodule
+          git diff --cached --quiet || git commit -m "chore: 自动同步上游 MT 规则"
+          git push
