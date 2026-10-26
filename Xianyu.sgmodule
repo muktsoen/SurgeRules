@@ -1,0 +1,23 @@
+#!name=闲鱼去广告（合并版）
+#!desc=ccyykk666 版与可莉现网版二合一：重叠接口两边清理都做，冲突处以可莉新版为准（由两个 Loon 插件移植而来，Surge 可用）
+#!author=ccyykk666, ddgksf2013, 可莉
+# 来源：ccyykk666 版 https://raw.githubusercontent.com/ccyykk666/Loon-Plugin/main/plugins/goofish/goofish_ad.lpx（2026-09-19）
+#       可莉现网版 https://kelee.one/Tool/Loon/Lpx/FleaMarket_remove_ads.lpx（2026-10-02）
+# 更新时间：2026-10-27
+# 合并说明：响应脚本按接口合并——只一边有的接口保留原清理；两边都有的接口先后都做（取清理交集）；
+# 冲突处（同一字段两边意见不同）以可莉新版为准：首页顶部列表只留 kingkongDo、搜索发现只滤 MarketHotSpot、
+# 搜索激活只删 hotwords、我的页按可莉版过滤、交易详情按可莉版白名单、开屏回空字典；
+# 请求侧：策略列表、商品推荐、附近角标、购买 feeds、搜索 shade 直接拦截（可莉版），
+# 故 ccyykk666 的策略列表、购买 feeds、搜索 shade 三条响应分支已成死规则、不再保留。
+# 注意：装了合并版就不要再装 Goofish.sgmodule 或 FleaMarket.sgmodule，三个模块的接口高度重叠。
+
+[Rule]
+DOMAIN-SUFFIX,iyes.youku.com,REJECT
+
+[Script]
+XY-request = type=http-request,pattern=^https?://(?:g-)?acs\.m\.goofish\.com/gw/(?:mtop\.taobao\.idlecommerce\.splash\.ads|mtop\.idle\.ad\.expose|mtop\.taobao\.idle\.user\.strategy\.list|mtop\.taobao\.idle\.item\.recommend\.list|mtop\.taobao\.idle\.local\.near\.by\.corner\.info|mtop\.taobao\.idle\.item\.buy\.feeds|mtop\.taobao\.idlemtopsearch\.search\.shade|mtop\.taobao\.idlemessage\.user\.query\.top\.resource|mtop\.taobao\.idle\.item\.resell\.recommendorhotcate|mtop\.taobao\.idle\.item\.resell\.channel|mtop\.taobao\.idle\.activity\.sell\.seller\.recommend|mtop\.taobao\.idle\.playboy\.recommend)/,script-path=https://raw.githubusercontent.com/muktsoen/SurgeRules/main/Xianyu-request.js
+XY-amdc = type=http-request,pattern=^http://[A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+){1,4}(?::\d+)?/amdc/mobileDispatch/,script-path=https://raw.githubusercontent.com/muktsoen/SurgeRules/main/Xianyu-request.js
+XY-rewrite = type=http-response,pattern=^https?://(?:g-)?acs\.m\.goofish\.com/gw/(?:mtop\.taobao\.idlecommerce\.splash\.async\.ads|mtop\.idle\.idleadv\.scene\.restore|mtop\.taobao\.idlehome\.home\.circle\.list|mtop\.taobao\.idlehome\.home\.nextfresh|mtop\.taobao\.idlehome\.widget\.refresh\.get|mtop\.taobao\.idlemtopsearch\.item\.search\.activate|mtop\.taobao\.idlemtopsearch\.search\.discover|mtop\.taobao\.idle\.local\.flow\.plat\.section|mtop\.taobao\.idle\.local\.home\.top|mtop\.taobao\.idle\.local\.home|mtop\.taobao\.idlemtopsearch\.detailpage\.search\.shade|mtop\.taobao\.idlemtopsearch\.search\.activate\.tablist|mtop\.taobao\.idlemtopsearch\.search\.activate\.trendlist|mtop\.(?:taobao\.)?idle\.user\.page\.my\.adapter|mtop\.taobao\.idle\.trade\.full\.info|mtop\.taobao\.idle\.awesome\.detail\.unit|mtop\.taobao\.idle\.item\.recommend|mtop\.taobao\.idlemtopsearch\.search|mtop\.taobao\.idle\.home\.whale\.modulet|mtop\.taobao\.idle\.fun\.follow\.feed\.list|mtop\.taobao\.idlehome\.home\.community|mtop\.taobao\.idlehome\.home\.newitem\.page|mtop\.taobao\.idlehome\.magic\.home\.page\.list),requires-body=true,script-path=https://raw.githubusercontent.com/muktsoen/SurgeRules/main/Xianyu.js
+
+[MITM]
+hostname = %APPEND% acs.m.goofish.com, g-acs.m.goofish.com
