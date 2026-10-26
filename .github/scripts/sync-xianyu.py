@@ -36,9 +36,11 @@ UPSTREAMS = [
     {
         "key": "fleamarket",
         "label": "可莉现网版 FleaMarket_remove_ads.lpx",
-        "url": "https://kelee.one/Tool/Loon/Lpx/FleaMarket_remove_ads.lpx",
+        # 优先走公网 scripthub（XIANYU_FM_URL，存在 GitHub secret 里，含随机路径保护）；
+        # 未设则回落 kelee.one 直取（runner 常被其 Cloudflare 挡，挡了就跳过）。
+        "url": os.environ.get("XIANYU_FM_URL") or "https://kelee.one/Tool/Loon/Lpx/FleaMarket_remove_ads.lpx",
         "snap": "FleaMarket_remove_ads.lpx",
-        "required": False,  # runner 常被 kelee.one 的 Cloudflare 挡，挡了就跳过
+        "required": False,
     },
 ]
 
