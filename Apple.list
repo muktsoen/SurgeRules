@@ -1,7 +1,7 @@
 # Apple 分流规则（上游每日自动同步）
-# 上游来源：QuixoticHeart(apple-cn) 170 + QuixoticHeart(apple) 1599
-# 更新时间：2026-10-26 06:17:43（北京时间）
-# 规则总数：1766（上游去重后 1766，自定义 0）
+# 上游来源：QuixoticHeart(apple-cn) 170 + QuixoticHeart(apple) 1598
+# 更新时间：2026-10-27 07:34:20（北京时间）
+# 规则总数：1765（上游去重后 1765，自定义 0）
 
 DOMAIN,7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe
 DOMAIN,api.smoot.apple.cn
@@ -1189,7 +1189,6 @@ DOMAIN-SUFFIX,icloud-content.com.cn
 DOMAIN-SUFFIX,icloud-isupport.com
 DOMAIN-SUFFIX,icloud-sandbox.com
 DOMAIN-SUFFIX,icloud.ch
-DOMAIN-SUFFIX,icloud.cn
 DOMAIN-SUFFIX,icloud.com
 DOMAIN-SUFFIX,icloud.de
 DOMAIN-SUFFIX,icloud.ee
