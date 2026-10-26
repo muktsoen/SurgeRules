@@ -1,0 +1,30 @@
+name: Sync ChinaMobile rules
+
+on:
+  schedule:
+    # 每天 UTC 20:00（北京时间次日 04:00）运行一次
+    - cron: "0 20 * * *"
+  workflow_dispatch:  # 允许在 Actions 页面手动触发
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch upstream and convert to Surge module
+        run: |
+          curl -sL "https://raw.githubusercontent.com/ccyykk666/Loon-Plugin/main/plugins/china-mobile/china_mobile_ad.plugin" -o /tmp/cm_plugin.txt
+          curl -sL "https://raw.githubusercontent.com/ccyykk666/Loon-Plugin/main/plugins/china-mobile/remove_ads.js" -o /tmp/cm_upstream.js
+          python3 .github/scripts/sync-chinamobile.py /tmp/cm_plugin.txt /tmp/cm_upstream.js
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ChinaMobile.js ChinaMobile.sgmodule
+          git diff --cached --quiet || git commit -m "chore: 自动同步上游中国移动规则"
+          git push
