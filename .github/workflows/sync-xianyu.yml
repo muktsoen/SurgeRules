@@ -1,0 +1,46 @@
+name: 闲鱼合并模块上游同步检查（每周）
+
+# 合并版是手工合并的，不能全自动重生成；本任务每周检查两边上游，
+# 规则正文有变化时更新快照并开 issue 提醒人工重合并，无变化则安静。
+on:
+  schedule:
+    - cron: "0 20 * * 0" # 每周日 20:00 UTC = 北京时间周一 04:00
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 检查上游
+        id: check
+        run: python3 .github/scripts/sync-xianyu.py
+
+      - name: 提交快照
+        if: steps.check.outputs.changed == 'true' || steps.check.outputs.snapshot_init == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/upstream/xianyu/
+          if [ "${{ steps.check.outputs.changed }}" = "true" ]; then
+            git commit -m "chore: 更新闲鱼合并模块上游快照（规则有变化，需人工重合并）"
+          else
+            git commit -m "chore: 建立闲鱼合并模块上游快照基线"
+          fi
+          git push
+
+      - name: 开 issue 提醒
+        if: steps.check.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh issue list --state open --search "闲鱼合并模块上游有更新" --json title --jq '.[].title' | grep -q "闲鱼合并模块上游有更新"; then
+            echo "已有 open issue，跳过"
+          else
+            gh issue create --title "闲鱼合并模块上游有更新（需手动重合并）" --body-file /tmp/xianyu-diff.md
+          fi
