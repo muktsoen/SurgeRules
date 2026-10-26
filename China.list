@@ -1,7 +1,7 @@
 # China 分流规则（上游每日自动同步）
 # 上游来源：QuixoticHeart(cn) 107788 + QuixoticHeart(cncidr) 17958 + VirgilClyne(ASN.China) 5076
 # 备注：cn.list 不含跨国网络服务提供商在中国大陆可直连的域名
-# 更新时间：2026-10-26 06:23:01（北京时间）
+# 更新时间：2026-10-27 07:39:13（北京时间）
 # 规则总数：130825（上游去重后 130822，自定义 3）
 
 DOMAIN-SUFFIX,0.xn--czrs0t
