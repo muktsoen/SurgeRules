@@ -19,6 +19,8 @@ jobs:
 
       - name: 检查上游
         id: check
+        env:
+          XIANYU_FM_URL: ${{ secrets.XIANYU_FM_URL }}
         run: python3 .github/scripts/sync-xianyu.py
 
       - name: 提交快照
