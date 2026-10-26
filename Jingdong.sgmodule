@@ -1,0 +1,17 @@
+#!name=京东去广告
+#!desc=移除京东广告（由 ccyykk666、RuCu6 的 Loon 插件移植而来，Surge 可用）
+#!author=ccyykk666, RuCu6
+#!arguments=HomeClean:true,OrderAds:true,ProfileClean:true,ProductClean:true
+# 来源：https://raw.githubusercontent.com/ccyykk666/Loon-Plugin/main/plugins/jingdong/Jingdong_remove_ads.lpx
+# 更新时间：2026-10-26
+# 说明：Loon 原插件的 [Rewrite] jq/替换/删除规则在模块里无等价物，已逐条翻成 Jingdong-rewrite.js；
+# 请求侧两条规则合并进 Jingdong-request.js。原插件还有一条 [Rule]（api.m.jd.com 全量 REJECT-NO-DROP），
+# 转过来会直接掐断京东 App 全部接口请求，故有意不转，见对话说明。
+
+[Script]
+JD-main = type=http-response,pattern=^https://api\.m\.jd\.com/client\.action\?(?:[^#]*&)?functionId=(?:clickRecommend|deliverLayer|myOrderInfo|myjdSetBusiness|newUserAllOrderList|orderTrackBusiness|personinfoBusiness|queryEvaluateFloors|queryFloorDetailInfo|uniformRecommend|uniformRecommend6|wareBusiness|welcomeHome)(?:&|$),requires-body=true,script-path=https://raw.githubusercontent.com/muktsoen/SurgeRules/main/Jingdong.js,argument=HomeClean:{{{HomeClean}}};OrderAds:{{{OrderAds}}};ProfileClean:{{{ProfileClean}}};ProductClean:{{{ProductClean}}}
+JD-rewrite = type=http-response,pattern=^https://api\.m\.jd\.com/(?:api|client\.action)\?(?:[^#]*&)?functionId=(?:basicConfig|getBubbleInfo|cart|start|getTabHomeInfo|newPurchaseWareCheck|getGiftBuyEntryInfo|queryListAsyncInfo|obtainBffGrowingInfo|querySmallVideoWindow|personalCenter|xview2Config|personInfoAsync|queryCircleInfo)(?:&|$),requires-body=true,script-path=https://raw.githubusercontent.com/muktsoen/SurgeRules/main/Jingdong-rewrite.js,argument=HomeClean:{{{HomeClean}}};OrderAds:{{{OrderAds}}};ProfileClean:{{{ProfileClean}}};ProductClean:{{{ProductClean}}}
+JD-request = type=http-request,pattern=^https://api\.m\.jd\.com/client\.action\?(?:[^#]*&)?functionId=(?:wareBusiness|cartCouponRecommendGoods|intelligentRecommendSku|searchBoxWord|stationPullService)(?:&|$),script-path=https://raw.githubusercontent.com/muktsoen/SurgeRules/main/Jingdong-request.js
+
+[MITM]
+hostname = %APPEND% api.m.jd.com
