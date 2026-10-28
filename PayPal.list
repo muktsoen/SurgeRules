@@ -1,6 +1,6 @@
 # PayPal 分流规则（上游每日自动同步）
 # 上游来源：blackmatrix7 248 + QuixoticHeart 247 + meta-mrs 245
-# 更新时间：2026-10-28 07:29:34（北京时间）
+# 更新时间：2026-10-29 07:52:54（北京时间）
 # 规则总数：249（上游去重后 249，自定义 0）
 
 DOMAIN-SUFFIX,account-paypal.info
