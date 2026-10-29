@@ -296,7 +296,9 @@ function __parseSurgeArgs() {
   }
 
   var isRechargeRequest = /\/i\/v1\/cust\/(?:aiMainQry|iopBatchQry)\//.test(url);
+  var isH5ServicePageRequest = /^https:\/\/h\.app\.coc\.10086\.cn\/biz-orange\/DA\/baseServiceFunction\/getAdverList(?:\?|$)/.test(url);
   var isH5Request =
+    isH5ServicePageRequest ||
     /\/(?:DH\/(?:message_query\/message\/query\/list|myCardVoucher\/getBannerList)|DA\/commonBoard\/getCommonBoard)(?:\?|$)/.test(url);
   var xPen = isRechargeRequest
     ? ""
@@ -791,6 +793,7 @@ function __parseSurgeArgs() {
     var body = payload && payload.rspBody;
     if (!body || !Array.isArray(body.areaList)) return false;
     var isRemainingPage = String(body.pageCode) === "00028";
+    var isBalancePage = String(body.pageCode) === "00040";
 
     var waterfallAreas = {
       "20260320004": true,
@@ -845,7 +848,11 @@ function __parseSurgeArgs() {
       removedAreas["20230621010"] = true;
       removedAreas["20230621014"] = true;
     }
-    if (isRemainingPage) removedAreas["20230515019"] = true;
+    if (isRemainingPage) {
+      removedAreas["20230515019"] = true;
+      removedAreas["20230612004"] = true;
+    }
+    if (isBalancePage) removedAreas["20230719010"] = true;
 
     var before = body.areaList.length;
     body.areaList = body.areaList.filter(function (area) {
@@ -866,20 +873,13 @@ function __parseSurgeArgs() {
       if (!Array.isArray(area && area.moduleList)) return;
       var areaId = String(area.areaId);
 
-      if (isRemainingPage && areaId === "20230612004") {
-        var bottomCount = area.moduleList.length;
-        area.moduleList = area.moduleList.filter(function (module) {
-          return String(module && module.moduleId) !== "market-button-2-001";
-        });
-        if (area.moduleList.length !== bottomCount) changed = true;
-      }
-
       if (isRemainingPage && areaId === "20230510013") {
         area.moduleList.forEach(function (module) {
           if (!Array.isArray(module && module.adverList)) return;
           var adCount = module.adverList.length;
           module.adverList = module.adverList.filter(function (adver) {
-            return String(adver && adver.markId) !== "1392480007";
+            var markId = String(adver && adver.markId);
+            return markId !== "1392480007" && markId !== "1392480008" && markId !== "1065770457";
           });
           if (module.adverList.length !== adCount) changed = true;
         });
@@ -1072,11 +1072,13 @@ function __parseSurgeArgs() {
         H5_AES_KEY,
         H5_AES_IV
       );
-      var h5Changed = /\/DH\/myCardVoucher\/getBannerList(?:\?|$)/.test(url)
-        ? filterCouponRecommendations(messagePayload)
-        : /\/DA\/commonBoard\/getCommonBoard(?:\?|$)/.test(url)
-          ? filterRechargeCommonBoard(messagePayload)
-          : filterMessageRecommendations(messagePayload);
+      var h5Changed = isH5ServicePageRequest
+        ? filterServicePages(messagePayload)
+        : /\/DH\/myCardVoucher\/getBannerList(?:\?|$)/.test(url)
+          ? filterCouponRecommendations(messagePayload)
+          : /\/DA\/commonBoard\/getCommonBoard(?:\?|$)/.test(url)
+            ? filterRechargeCommonBoard(messagePayload)
+            : filterMessageRecommendations(messagePayload);
       if (!h5Changed) {
         $done({});
         return;
