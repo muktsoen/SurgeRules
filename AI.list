@@ -1,7 +1,7 @@
 # AI 分流规则（上游每日自动同步）
-# 上游来源：QuixoticHeart 244 + ddgksf2013 78 + skk.moe 56 + blackmatrix7(Facebook) 570 + VPSDance 342
-# 更新时间：2026-10-28 07:37:28（北京时间）
-# 规则总数：1019（上游去重后 1015，自定义 4）
+# 上游来源：QuixoticHeart 250 + ddgksf2013 78 + skk.moe 56 + blackmatrix7(Facebook) 570 + VPSDance 346
+# 更新时间：2026-10-29 08:11:50（北京时间）
+# 规则总数：1023（上游去重后 1019，自定义 4）
 
 DOMAIN,7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe
 DOMAIN,ai.google.dev
@@ -68,6 +68,7 @@ DOMAIN-SUFFIX,antspace.dev
 DOMAIN-SUFFIX,anythingllm.com
 DOMAIN-SUFFIX,apps.mzstatic.com
 DOMAIN-SUFFIX,arena.ai
+DOMAIN-SUFFIX,artificialanalysis.ai
 DOMAIN-SUFFIX,auth0.com
 DOMAIN-SUFFIX,bard.google.com
 DOMAIN-SUFFIX,byteoversea.com
@@ -95,6 +96,7 @@ DOMAIN-SUFFIX,claudestudio.com
 DOMAIN-SUFFIX,claudeusercontent.com
 DOMAIN-SUFFIX,clawhub.ai
 DOMAIN-SUFFIX,client-api.arkoselabs.com
+DOMAIN-SUFFIX,cline.bot
 DOMAIN-SUFFIX,clipdrop.co
 DOMAIN-SUFFIX,cloudcode-pa.googleapis.com
 DOMAIN-SUFFIX,codeium.com
@@ -106,6 +108,8 @@ DOMAIN-SUFFIX,cohere.com
 DOMAIN-SUFFIX,comfy.org
 DOMAIN-SUFFIX,comfyci.org
 DOMAIN-SUFFIX,comfyregistry.org
+DOMAIN-SUFFIX,commandcode.ai
+DOMAIN-SUFFIX,context7.com
 DOMAIN-SUFFIX,copilot-stg.com
 DOMAIN-SUFFIX,copilot.cloud.microsoft
 DOMAIN-SUFFIX,copilot.com
@@ -182,6 +186,7 @@ DOMAIN-SUFFIX,manus.im
 DOMAIN-SUFFIX,manuscdn.com
 DOMAIN-SUFFIX,marscode.com
 DOMAIN-SUFFIX,meta.ai
+DOMAIN-SUFFIX,metaaiusercontent.com
 DOMAIN-SUFFIX,metaaivm.com
 DOMAIN-SUFFIX,midjourney.com
 DOMAIN-SUFFIX,minimax.io
@@ -193,6 +198,7 @@ DOMAIN-SUFFIX,notebook.google.com
 DOMAIN-SUFFIX,notebooklm.google
 DOMAIN-SUFFIX,notebooklm.google.com
 DOMAIN-SUFFIX,notegpt.io
+DOMAIN-SUFFIX,nousresearch.com
 DOMAIN-SUFFIX,novelai.net
 DOMAIN-SUFFIX,oaistatic.com
 DOMAIN-SUFFIX,oaistatsig.com
@@ -924,10 +930,8 @@ DOMAIN-SUFFIX,trae-api-sg.mchost.guru
 DOMAIN-SUFFIX,tron-sg.bytelemon.com
 DOMAIN-SUFFIX,character.ai
 DOMAIN-SUFFIX,civitai.com
-DOMAIN-SUFFIX,cline.bot
 DOMAIN,api.cloudflare.com
 DOMAIN-SUFFIX,ai.cloudflare.com
-DOMAIN-SUFFIX,commandcode.ai
 DOMAIN-SUFFIX,continue.dev
 DOMAIN-SUFFIX,challenges.cloudflare.com
 DOMAIN-SUFFIX,observeit.net
