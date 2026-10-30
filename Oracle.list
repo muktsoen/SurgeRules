@@ -1,5 +1,5 @@
 # Oracle 分流规则（上游 blackmatrix7/ios_rule_script，每日自动同步）
-# 更新时间：2026-10-30 07:41:57（北京时间）
+# 更新时间：2026-10-31 07:21:46（北京时间）
 # 规则总数：25（上游 25，自定义 0）
 
 DOMAIN-SUFFIX,a1cbafa5ea9a6480cb8e9ffba46cbad9-466059813.us-west-2.elb.amazonaws.com
