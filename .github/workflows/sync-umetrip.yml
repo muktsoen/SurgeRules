@@ -22,5 +22,11 @@ jobs:
           git add Umetrip.sgmodule
           if ! git diff --cached --quiet; then
             git commit -m "Sync Umetrip.sgmodule from upstream Loon plugin"
+            for i in 1 2 3 4 5; do
+              git push && exit 0
+              echo "Push conflict, rebasing and retrying ($i/5)..."
+              sleep $(( RANDOM % 10 + 2 ))
+              git pull --rebase origin main
+            done
             git push
           fi
