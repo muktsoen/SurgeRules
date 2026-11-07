@@ -34,6 +34,12 @@ jobs:
           else
             git commit -m "chore: 建立闲鱼合并模块上游快照基线"
           fi
+          for i in 1 2 3 4 5; do
+            git push && exit 0
+            echo "Push conflict, rebasing and retrying ($i/5)..."
+            sleep $(( RANDOM % 10 + 2 ))
+            git pull --rebase origin main
+          done
           git push
 
       - name: 开 issue 提醒
