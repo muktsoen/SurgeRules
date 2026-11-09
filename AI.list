@@ -1,7 +1,7 @@
 # AI 分流规则（上游每日自动同步）
-# 上游来源：QuixoticHeart 254 + ddgksf2013 78 + skk.moe 56 + blackmatrix7(Facebook) 570 + VPSDance 346
-# 更新时间：2026-11-09 07:29:06（北京时间）
-# 规则总数：1027（上游去重后 1023，自定义 4）
+# 上游来源：QuixoticHeart 254 + ddgksf2013 78 + skk.moe 56 + blackmatrix7(Facebook) 570 + VPSDance 348 + SukkaW(AppleIntelligence) 5 + TributePaulWalker(AppleIntelligence) 6
+# 更新时间：2026-11-09 03:27:11（北京时间）
+# 规则总数：1029（上游去重后 1015，自定义 14）
 
 DOMAIN,7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe
 DOMAIN,ai.google.dev
@@ -14,10 +14,6 @@ DOMAIN,antigravity.googleapis.com
 DOMAIN,api.github.com
 DOMAIN,api.statsig.com
 DOMAIN,api.together.xyz
-DOMAIN,apple-relay.apple.com
-DOMAIN,apple-relay.cloudflare.com
-DOMAIN,apple-relay.fastly-edge.com
-DOMAIN,apple-relay.mask.apple-dns.net
 DOMAIN,appsgenaiserver-pa.clients.google.com
 DOMAIN,appsgenaiserver-pa.clients6.google.com
 DOMAIN,appsgenaiserver-pa.googleapis.com
@@ -28,12 +24,9 @@ DOMAIN,copilot-telemetry-service.githubusercontent.com
 DOMAIN,copilot-telemetry.githubusercontent.com
 DOMAIN,copilot-workspace.githubnext.com
 DOMAIN,copilotprodattachments.blob.core.windows.net
-DOMAIN,cp4.cloudflare.com
 DOMAIN,daily-cloudcode-pa.googleapis.com
 DOMAIN,geminiweb-pa.clients.google.com
 DOMAIN,geminiweb-pa.clients6.google.com
-DOMAIN,gspe1-ssl.ls.apple.com
-DOMAIN,guzzoni.apple.com
 DOMAIN,http-intake.logs.us5.datadoghq.com
 DOMAIN,imagine.meta.com
 DOMAIN,notebooklm-pa.googleapis.com
@@ -230,7 +223,6 @@ DOMAIN-SUFFIX,proactivebackend-pa.googleapis.com
 DOMAIN-SUFFIX,qoder.com
 DOMAIN-SUFFIX,robinfrontend-pa.googleapis.com
 DOMAIN-SUFFIX,sider.ai
-DOMAIN-SUFFIX,smoot.apple.com
 DOMAIN-SUFFIX,sora.com
 DOMAIN-SUFFIX,spicywriter.com
 DOMAIN-SUFFIX,stitch.withgoogle.com
@@ -1032,3 +1024,13 @@ DOMAIN,hatch.metaaivm.com
 DOMAIN-SUFFIX,muse.ai,proxy
 DOMAIN-SUFFIX,museai.com,proxy
 DOMAIN-SUFFIX,ecto1.ai,proxy
+DOMAIN,apple-relay.apple.com
+DOMAIN,apple-relay.cloudflare.com
+DOMAIN,apple-relay.fastly-edge.com
+DOMAIN,apple-relay.akamaized.net
+DOMAIN,apple-relay.mask.apple-dns.net
+DOMAIN,cp4.cloudflare.com
+DOMAIN,guzzoni.apple.com
+DOMAIN,gspe1-ssl.ls.apple.com
+DOMAIN,api-siri-prod.apple.com
+DOMAIN-SUFFIX,smoot.apple.com
