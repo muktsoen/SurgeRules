@@ -63,13 +63,14 @@ jobs:
               return (rtype, arg)
 
           SOURCES = [
+              # Apple Intelligence 放最前：规则按顺序匹配，避免被后面更宽的 Apple 规则抢先命中
+              ("/tmp/ai6.conf", "SukkaW(AppleIntelligence)", read_text_list),
+              ("/tmp/ai7.list", "TributePaulWalker(AppleIntelligence)", read_text_list),
               ("/tmp/ai1.list", "QuixoticHeart", read_text_list),
               ("/tmp/ai2.yaml", "ddgksf2013", read_clash_yaml),
               ("/tmp/ai3.conf", "skk.moe", read_text_list),
               ("/tmp/ai4.list", "blackmatrix7(Facebook)", read_text_list),
               ("/tmp/ai5.list", "VPSDance", read_text_list),
-              ("/tmp/ai6.conf", "SukkaW(AppleIntelligence)", read_text_list),
-              ("/tmp/ai7.list", "TributePaulWalker(AppleIntelligence)", read_text_list),
           ]
 
           # 1. 先读旧文件中的自定义规则（保留区内容；兼容没有保留区的旧文件）
