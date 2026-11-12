@@ -1,0 +1,26 @@
+name: Sync BlockHTTPDNS
+
+on:
+  schedule:
+    - cron: "0 20 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Merge HTTPDNS blockers
+        run: python3 .github/scripts/sync-blockhttpdns.py
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add BlockHTTPDNS.sgmodule
+          if ! git diff --cached --quiet; then
+            git commit -m "Sync BlockHTTPDNS.sgmodule from upstream HTTPDNS blockers"
+            git push
+          fi
