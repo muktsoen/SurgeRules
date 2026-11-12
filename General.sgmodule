@@ -1,0 +1,12 @@
+#!name=General
+#!desc=通用增强：返回真实 IP、跳过代理、MITM 排除。合并自 SukkaW Always Real IP Plus + VirgilClyne General Enhanced，去重后每周一自动更新。
+#!author=SukkaW, VirgilClyne
+#!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Bypass.png
+
+[General]
+skip-proxy = %APPEND% *.local, 10.0.0.0/8, 127.0.0.1/32, 172.16.0.0/12, 192.168.0.0/16, 193.168.0.1/32, ::1/128, captive.apple.com, e.crashlytics.com, fe80::/10, gate.lagou.com, localhost, login-service.mobile-bank.psbc.com, mobile-bank.psbc.com, passenger.t3go.cn, www.abchina.com.cn, www.baidu.com, wxh.wo.cn, yunbusiness.ccb.com
+always-real-ip = %APPEND% *.10099.com.cn, *.126.net, *.blzstatic.cn, *.cmbchina.com, *.cmpassport.com, *.direct, *.icitymobile.mobi, *.jegotrip.com.cn, *.kuwo.cn, *.lan, *.logon.battle.net, *.logon.battlenet.com.cn, *.mcdn.bilivideo.cn, *.microdone.cn, *.msftconnecttest.com, *.msftncsi.com, *.music.163.com, *.music.migu.cn, *.ntp.org.cn, *.pingan.com.cn, *.pool.ntp.org, *.srv.nintendo.net, *.stun.playstation.net, *.stun.twilio.com, *.turn.twilio.com, *.wosms.cn, *.xboxlive.com, *.xiami.com, *.y.qq.com, amobile.music.tc.qq.com, api-jooxtt.sanook.com, api.joox.com, app.yinxiang.com, aqqmusic.tc.qq.com, cable.auth.com, DC._msDCS.*.*, detectportal.firefox.com, dl.stream.qqmusic.qq.com, enrichgw.10010.com, GC._msDCS.*.*, hmrz.wo.cn, id.mail.wo.cn, id6.me, injections.adguard.org, isure.stream.qqmusic.qq.com, joox.com, lancache.steamcontent.com, local.adguard.org, localhost.*.qq.com, localhost.*.weixin.qq.com, mdn.open.wo.cn, mobileoc.music.tc.qq.com, music.163.com, music.migu.cn, music.taihe.com, musicapi.taihe.com, network-test.debian.org, nishub1.10010.com, ntp.*.com, ntp?.*.com, open.e.189.cn, opencloud.wostore.cn, PDC._msDCS.*.*, pool.ntp.org, proxy.golang.org, resolver1.opendns.com, songsearch.kugou.com, streamoc.music.tc.qq.com, stun.*, stun.syncthing.net, time.*.com, time.*.edu.cn, time.*.gov, time?.*.com, trackercdn.kugou.com, xbox.*.microsoft.com, y.qq.com
+
+[MITM]
+hostname = %APPEND% -*.facebook.com, -*.instagram.com, -*.pstatp.com, -*.snssdk.com, -*.twitter.com
+hostname-disabled = %APPEND% buy.itunes.apple.com, gateway.icloud.com, gateway.icloud.com.cn, ios.chat.openai.com, weather-data.apple.com
