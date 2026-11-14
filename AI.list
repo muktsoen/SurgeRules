@@ -1,6 +1,6 @@
 # AI 分流规则（上游每日自动同步）
 # 上游来源：SukkaW(AppleIntelligence) 5 + TributePaulWalker(AppleIntelligence) 6 + QuixoticHeart 254 + ddgksf2013 78 + skk.moe 56 + blackmatrix7(Facebook) 570 + VPSDance 348
-# 更新时间：2026-11-13 08:57:16（北京时间）
+# 更新时间：2026-11-14 08:46:15（北京时间）
 # 规则总数：1027（上游去重后 1023，自定义 4）
 
 DOMAIN,apple-relay.fastly-edge.com
