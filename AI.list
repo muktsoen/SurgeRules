@@ -1,7 +1,7 @@
 # AI 分流规则（上游每日自动同步）
-# 上游来源：SukkaW(AppleIntelligence) 5 + TributePaulWalker(AppleIntelligence) 6 + QuixoticHeart 254 + ddgksf2013 78 + skk.moe 56 + blackmatrix7(Facebook) 570 + VPSDance 348
-# 更新时间：2026-11-15 07:43:54（北京时间）
-# 规则总数：1027（上游去重后 1023，自定义 4）
+# 上游来源：SukkaW(AppleIntelligence) 5 + TributePaulWalker(AppleIntelligence) 6 + QuixoticHeart 254 + ddgksf2013 78 + skk.moe 59 + blackmatrix7(Facebook) 570 + VPSDance 348
+# 更新时间：2026-11-16 07:50:24（北京时间）
+# 规则总数：1030（上游去重后 1026，自定义 4）
 
 DOMAIN,apple-relay.fastly-edge.com
 DOMAIN,apple-relay.cloudflare.com
@@ -294,18 +294,21 @@ DOMAIN-SUFFIX,bing-shopping.microsoft-falcon.io
 DOMAIN-SUFFIX,edgeservices.bing.com
 DOMAIN-SUFFIX,azureedge.net
 DOMAIN-SUFFIX,imgix.net
+DOMAIN,cloud.zed.dev
 DOMAIN,openrouter.ai
 DOMAIN,api.jetbrains.ai
 DOMAIN,jules.google.com
 DOMAIN,antigravity.google
 DOMAIN,server.codeium.com
 DOMAIN,aida.googleapis.com
+DOMAIN,aicode.googleapis.com
 DOMAIN,inference.codeium.com
 DOMAIN,antigravity-unleash.goog
 DOMAIN,gateway.ai.cloudflare.com
 DOMAIN,aisandbox-pa.googleapis.com
 DOMAIN,server.self-serve.windsurf.com
 DOMAIN,robinfrontend-pa.googleapis.com
+DOMAIN,daily-cloudcode-pa.sandbox.googleapis.com
 URL-REGEX,https://www\.google\.com/.*continue=https://gemini\.google\.com.+
 DOMAIN-SUFFIX,aboutfacebook.com
 DOMAIN-SUFFIX,accessfacebookfromschool.com
