@@ -22,17 +22,11 @@ jobs:
           curl -sL "https://ruleset.skk.moe/List/non_ip/ai.conf" -o /tmp/ai3.conf
           curl -sL "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Facebook/Facebook.list" -o /tmp/ai4.list
           curl -sL "https://github.com/VPSDance/ai-proxy-rules/raw/refs/heads/main/rules/surge/global.list" -o /tmp/ai5.list
-          curl -sL "https://raw.githubusercontent.com/SukkaW/Surge/master/Source/non_ip/apple_intelligence.conf" -o /tmp/ai6.conf
-          curl -sL "https://raw.githubusercontent.com/TributePaulWalker/Profiles/main/Surge/Ruleset/AppleIntelligence.list" -o /tmp/ai7.list
           python3 - <<'EOF'
           import os, re
           from datetime import datetime, timezone, timedelta
 
           MARKER = "# ===== 自定义规则（自动同步会保留此区域内容） ====="
-
-          def normalize(line):
-              # 统一 "TYPE, arg" 为 "TYPE,arg"：去掉逗号两侧空白，避免上游格式差异
-              return re.sub(r"\s*,\s*", ",", line.strip())
 
           def read_text_list(path):
               # Surge 原生规则：跳过空行和 # 注释
@@ -42,7 +36,7 @@ jobs:
                       line = line.strip()
                       if not line or line.startswith("#"):
                           continue
-                      rules.append(normalize(line))
+                      rules.append(line)
               return rules
 
           def read_clash_yaml(path):
@@ -52,8 +46,21 @@ jobs:
                   for line in f:
                       m = re.match(r"\s*-\s*([A-Za-z0-9-]+),([^,]+)", line)
                       if m:
-                          rules.append(normalize(f"{m.group(1)},{m.group(2).strip()}"))
+                          rules.append(f"{m.group(1)},{m.group(2).strip()}")
               return rules
+
+          # 2026-11-17 用户要求从 AI 规则中去掉 Apple Intelligence 相关域名。
+          # 这些域名不止在 SukkaW / TributePaulWalker 两个专源里，QuixoticHeart
+          # 的主源里也有，所以用排除集在所有上游统一过滤，否则每天同步会加回来。
+          EXCLUDE = {
+              ("DOMAIN", "apple-relay.fastly-edge.com"),
+              ("DOMAIN", "apple-relay.cloudflare.com"),
+              ("DOMAIN", "apple-relay.apple.com"),
+              ("DOMAIN", "cp4.cloudflare.com"),
+              ("DOMAIN", "gspe1-ssl.ls.apple.com"),
+              ("DOMAIN-SUFFIX", "smoot.apple.com"),
+              ("DOMAIN", "guzzoni.apple.com"),
+          }
 
           def rule_key(line):
               # 规则键 = 类型 + 参数（忽略策略列 / no-resolve 等后缀）
@@ -63,9 +70,6 @@ jobs:
               return (rtype, arg)
 
           SOURCES = [
-              # Apple Intelligence 放最前：规则按顺序匹配，避免被后面更宽的 Apple 规则抢先命中
-              ("/tmp/ai6.conf", "SukkaW(AppleIntelligence)", read_text_list),
-              ("/tmp/ai7.list", "TributePaulWalker(AppleIntelligence)", read_text_list),
               ("/tmp/ai1.list", "QuixoticHeart", read_text_list),
               ("/tmp/ai2.yaml", "ddgksf2013", read_clash_yaml),
               ("/tmp/ai3.conf", "skk.moe", read_text_list),
@@ -94,7 +98,7 @@ jobs:
               lines = parser(path)
               counts[name] = len(lines)
               for line in lines:
-                  if line not in seen and rule_key(line) not in custom_keys:
+                  if line not in seen and rule_key(line) not in custom_keys and rule_key(line) not in EXCLUDE:
                       seen.add(line)
                       upstream.append(line)
 
