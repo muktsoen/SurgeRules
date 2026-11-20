@@ -1,8 +1,8 @@
 # China 分流规则（上游每日自动同步）
-# 上游来源：QuixoticHeart(cn) 107774 + QuixoticHeart(cncidr) 17958 + VirgilClyne(ASN.China) 5076
+# 上游来源：QuixoticHeart(cn) 107773 + QuixoticHeart(cncidr) 17958 + VirgilClyne(ASN.China) 5076
 # 备注：cn.list 不含跨国网络服务提供商在中国大陆可直连的域名
-# 更新时间：2026-11-19 09:47:28（北京时间）
-# 规则总数：130811（上游去重后 130808，自定义 3）
+# 更新时间：2026-11-20 09:42:15（北京时间）
+# 规则总数：130810（上游去重后 130807，自定义 3）
 
 DOMAIN-SUFFIX,0.xn--czrs0t
 DOMAIN-SUFFIX,0.xn--unup4y
@@ -84666,7 +84666,6 @@ DOMAIN-SUFFIX,tencent-stock.com
 DOMAIN-SUFFIX,tencent.com
 DOMAIN-SUFFIX,tencent.design
 DOMAIN-SUFFIX,tencent.net
-DOMAIN-SUFFIX,tencentads.com
 DOMAIN-SUFFIX,tencentads.net
 DOMAIN-SUFFIX,tencentanxin.com
 DOMAIN-SUFFIX,tencentapigw.com
