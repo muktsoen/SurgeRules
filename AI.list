@@ -1,7 +1,7 @@
 # AI 分流规则（上游每日自动同步）
-# 上游来源：QuixoticHeart 258 + ddgksf2013 78 + skk.moe 59 + blackmatrix7(Facebook) 570 + VPSDance 349
-# 更新时间：2026-11-19 09:46:15（北京时间）
-# 规则总数：1026（上游去重后 1022，自定义 4）
+# 上游来源：QuixoticHeart 258 + ddgksf2013 78 + skk.moe 61 + blackmatrix7(Facebook) 570 + VPSDance 349
+# 更新时间：2026-11-20 09:42:08（北京时间）
+# 规则总数：1028（上游去重后 1024，自定义 4）
 
 DOMAIN,7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe
 DOMAIN,ai.google.dev
@@ -291,6 +291,7 @@ DOMAIN-SUFFIX,bing-shopping.microsoft-falcon.io
 DOMAIN-SUFFIX,edgeservices.bing.com
 DOMAIN-SUFFIX,azureedge.net
 DOMAIN-SUFFIX,imgix.net
+DOMAIN,claude.site
 DOMAIN,cloud.zed.dev
 DOMAIN,openrouter.ai
 DOMAIN,api.jetbrains.ai
@@ -303,6 +304,7 @@ DOMAIN,inference.codeium.com
 DOMAIN,antigravity-unleash.goog
 DOMAIN,gateway.ai.cloudflare.com
 DOMAIN,aisandbox-pa.googleapis.com
+DOMAIN,bridge.claudeusercontent.com
 DOMAIN,server.self-serve.windsurf.com
 DOMAIN,robinfrontend-pa.googleapis.com
 URL-REGEX,https://www\.google\.com/.*continue=https://gemini\.google\.com.+
