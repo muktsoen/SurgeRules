@@ -1,0 +1,8 @@
+#!name=星驿去广告
+#!desc=星驿付、星驿秘书去广告：开屏、首页横幅/弹窗/悬浮、原生广告、系统公告弹窗。Loon 规则转制，命中返回 404。
+
+[Script]
+星驿去广告 = type=http-request, pattern=^https:\/\/(?:gtqt\.postar\.cn\/gtqt-mht-api\/appAdvertApi\/(?:openAppAdvert|homePageAdvert)|ac1\.dcloud\.net\.cn\/app\/acs|gtqt\.postar\.cn\/gtqt-mms-service\/appAdvertApi\/openAppAdvert|(?:gtqt\.postar\.cn|gtqtpostar\.gtxygroup\.com)\/gtqt-mms-service\/popover\/unifyPopup), script-path=https://raw.githubusercontent.com/muktsoen/SurgeRules/main/XingyiAds.js, requires-body=0, timeout=10
+
+[MITM]
+hostname = %APPEND% gtqt.postar.cn, ac1.dcloud.net.cn, gtqtpostar.gtxygroup.com
